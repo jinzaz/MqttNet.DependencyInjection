@@ -1,8 +1,21 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/jinzaz/MqttNet.DependencyInjection</RepositoryUrl>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<Title>MqttNet DependencyInjection in AspNetCore</Title>
+	<Authors>john.jiang</Authors>
+	<Version>1.0.0</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.25" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.25" />
