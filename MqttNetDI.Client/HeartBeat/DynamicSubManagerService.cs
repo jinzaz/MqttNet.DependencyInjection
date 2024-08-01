@@ -16,16 +16,16 @@ namespace MqttNetDI.Client.HeartBeat
     public class DynamicSubManagerService : BackgroundService, IDynamicSubManagerService
     {
         public Dictionary<string, ClientState> HeartBeatList { get; set; }
-        public List<ClientTopic> ClientTopics { get; set; }
+        public IEnumerable<ClientTopic> ClientTopics => _clientTopics;
         private readonly IMqttClientCreate _MqttClientCreate;
         private readonly DynamicSubOption _options;
         private readonly IMqttClientEventHandler _mqttClientEventHandler;
-        private List<ClientTopic> clientTopics;
+        private IEnumerable<ClientTopic> _clientTopics;
         public DynamicSubManagerService(IMqttClientCreate mqttClientCreate, IMqttClientEventHandler mqttClientEventHandler, IOptions<DynamicSubOption> options)
         {
             _MqttClientCreate = mqttClientCreate;
             _mqttClientEventHandler = mqttClientEventHandler;
-            _mqttClientEventHandler.SetTopic(out clientTopics);
+            _mqttClientEventHandler.SetTopic(out _clientTopics);
             _options = options.Value;
             if (HeartBeatList == null)
             {
@@ -55,14 +55,14 @@ namespace MqttNetDI.Client.HeartBeat
                                     {
                                         if (!value.Online)
                                         {
-                                            await Subscribe(clientTopics.Where(x => x.DeviceNo == key).Select(s => s.TopicList).First(), stoppingToken);
+                                            await Subscribe(_clientTopics.Where(x => x.DeviceNo == key).Select(s => s.TopicList).First(), stoppingToken);
                                         }
                                         HeartBeatList[key].Online = true;
                                     }
                                     else
                                     {
                                         HeartBeatList[key].Online = false;
-                                        await UnSubscribe(clientTopics.Where(x => x.DeviceNo == key).Select(s => s.TopicList).First(), stoppingToken);
+                                        await UnSubscribe(_clientTopics.Where(x => x.DeviceNo == key).Select(s => s.TopicList).First(), stoppingToken);
                                         HeartBeatList.Remove(key);
                                         i--;
                                     }

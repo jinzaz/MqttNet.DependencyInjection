@@ -11,6 +11,6 @@ namespace MqttNetDI.Client.HeartBeat
         /// </summary>
         Dictionary<string, ClientState> HeartBeatList { get; set; }
 
-        List<ClientTopic> ClientTopics { get; set; }
+        IEnumerable<ClientTopic> ClientTopics { get; }
     }
 }

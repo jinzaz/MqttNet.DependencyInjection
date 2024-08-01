@@ -23,18 +23,18 @@ namespace MqttNet.DependencyInjection
         /// 心跳接收处理
         /// </summary>
         /// <param name="heartBeatArgs"></param>
-        public abstract void HeartBeatReceived(HeartBeatArgs heartBeatArgs);
+        public abstract Task HeartBeatReceivedAsync(HeartBeatArgs heartBeatArgs);
         /// <summary>
         /// 信息接收处理
         /// </summary>
         /// <param name="args"></param>
-        public abstract void MessageReceived(MessageReceiveArgs args);
+        public abstract Task MessageReceivedAsync(MessageReceiveArgs args);
         /// <summary>
         /// 主题订阅
         /// </summary>
         /// <param name="mqttClient"></param>
         /// <returns></returns>
-        public abstract void SetTopic(out List<ClientTopic> mqttClient);
+        public abstract void SetTopic(out IEnumerable<ClientTopic> mqttClient);
 
     }
 }

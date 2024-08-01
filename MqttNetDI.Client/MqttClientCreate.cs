@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using MQTTnet;
 using MQTTnet.Client;
-using MQTTnet.Client.Options;
 using System;
 using System.Collections.Generic;
 using System.Text;
