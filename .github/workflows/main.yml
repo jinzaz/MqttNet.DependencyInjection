@@ -38,7 +38,7 @@ jobs:
         dotnet-version: 7.0.x
  
     - name: Build and Pack NuGet package with versioning
-      run: dotnet pack ../${{ vars.CS_PROJ_PATH }} -p:Version='${{ steps.gitversion.outputs.SemVer }}' -c Release
+      run: dotnet pack MqttNet.DependencyInjection/${{ vars.CS_PROJ_PATH }} -p:Version='${{ steps.gitversion.outputs.SemVer }}' -c Release
 
     - name: Upload NuGet package to GitHub
       uses: actions/upload-artifact@v3.1.3
