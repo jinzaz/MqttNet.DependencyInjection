@@ -10,8 +10,8 @@ namespace MqttNetDI.Client
 {
     public interface IMqttClientEventHandler
     {
-        void SetTopic(out List<ClientTopic> topicList);
-        void HeartBeatReceived(HeartBeatArgs args);
-        void MessageReceived(MessageReceiveArgs args);
+        void SetTopic(out IEnumerable<ClientTopic> topicList);
+        Task HeartBeatReceivedAsync(HeartBeatArgs args);
+        Task MessageReceivedAsync(MessageReceiveArgs args);
     }
 }

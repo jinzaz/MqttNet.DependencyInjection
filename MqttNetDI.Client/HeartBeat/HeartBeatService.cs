@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using MQTTnet;
+using MQTTnet.Protocol;
 using MqttNetDI.Client;
 using Newtonsoft.Json;
 using System;
@@ -39,7 +40,7 @@ namespace MqttNetDI.Client.HeartBeat
                 var applicationMessage = new MqttApplicationMessageBuilder()
                     .WithTopic(_options.PubHeartBeatTopic)       // 主题
                     .WithPayload(JsonConvert.SerializeObject(heartBeatInfo))   // 消息
-                    .WithAtMostOnceQoS()  // qos
+                    .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtMostOnce)  // qos
                     .Build();
                 await _mqttClientCreate.mqttClient.PublishAsync(applicationMessage, stoppingToken);
             }

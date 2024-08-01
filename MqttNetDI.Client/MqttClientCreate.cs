@@ -13,7 +13,7 @@ namespace MqttNetDI.Client
         private readonly MqttClientConfig _mqttClientConfig;
 
         public IMqttClient mqttClient { get; set; }
-        public IMqttClientOptions mqttClientOptions { get; set; }
+        public MqttClientOptions mqttClientOptions { get; set; }
         public MqttClientCreate(IOptions<MqttClientConfig> options)
         {
             _mqttClientConfig = options.Value;
@@ -35,7 +35,7 @@ namespace MqttNetDI.Client
             optionsBuilder.WithKeepAlivePeriod(TimeSpan.FromSeconds(2000));
             optionsBuilder.WithCleanSession(true);
             optionsBuilder.WithProtocolVersion(MQTTnet.Formatter.MqttProtocolVersion.V310);
-            optionsBuilder.WithCommunicationTimeout(TimeSpan.FromHours(1));
+            optionsBuilder.WithTimeout(TimeSpan.FromHours(1));
             // 创建选项
             mqttClientOptions = optionsBuilder.Build();
         }

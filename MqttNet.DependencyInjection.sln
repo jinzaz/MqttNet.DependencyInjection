@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MqttNet.DependencyInjection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MqttNetDI.Client", "MqttNetDI.Client\MqttNetDI.Client.csproj", "{B228A523-BA2A-43B5-B692-A0DD9BBAEE46}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MqttNetDI.Server", "MqttNetDI.Server\MqttNetDI.Server.csproj", "{48E2C9C8-7B2F-4572-8BA3-BD122CF12504}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{B228A523-BA2A-43B5-B692-A0DD9BBAEE46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B228A523-BA2A-43B5-B692-A0DD9BBAEE46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B228A523-BA2A-43B5-B692-A0DD9BBAEE46}.Release|Any CPU.Build.0 = Release|Any CPU
-		{48E2C9C8-7B2F-4572-8BA3-BD122CF12504}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{48E2C9C8-7B2F-4572-8BA3-BD122CF12504}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{48E2C9C8-7B2F-4572-8BA3-BD122CF12504}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{48E2C9C8-7B2F-4572-8BA3-BD122CF12504}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,6 @@
 ﻿using MQTTnet;
+using MQTTnet.Client;
+using MQTTnet.Packets;
 using MQTTnet.Protocol;
 using System;
 using System.Collections.Generic;
@@ -58,13 +60,33 @@ namespace MqttNetDI.Client
         /// </summary>
         public Action<CancellationToken> AcknowledgeAsync { get; }
 
-        public MessageReceiveArgs(string topic, string clientId, string message, MqttQualityOfServiceLevel qosLevel, bool retain, Action<CancellationToken> action)
+        /// <summary>
+        ///     Gets or sets the reason code which will be sent to the server.
+        /// </summary>
+        public MqttApplicationMessageReceivedReasonCode ReasonCode { get; }
+
+        /// <summary>
+        ///     Gets or sets the user properties which will be sent to the server in the ACK packet etc.
+        /// </summary>
+        public List<MqttUserProperty> ResponseUserProperties { get; }
+
+        public MessageReceiveArgs(
+            string topic, 
+            string clientId, 
+            string message, 
+            MqttQualityOfServiceLevel qosLevel, 
+            bool retain,
+            MqttApplicationMessageReceivedReasonCode reasonCode,
+            List<MqttUserProperty> userProperties,
+            Action<CancellationToken> action)
         {
             Topic = topic;
             ClientId = clientId;
             Message = message;
             QosLevel = qosLevel;
             Retain = retain;
+            ReasonCode = reasonCode;
+            ResponseUserProperties = userProperties;
             AcknowledgeAsync = action;
         }
     }

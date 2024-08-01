@@ -77,3 +77,4 @@ jobs:
         name: Release ${{ needs.build.outputs.Version }}
         artifacts: "nugetPackage/*"
         token: ${{ secrets.NUGET_PACKAGE_TOKEN }}
+        files: sourceCode/*

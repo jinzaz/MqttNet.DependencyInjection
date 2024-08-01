@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using MQTTnet.Protocol;
 
 namespace MqttNet.DependencyInjection.Publish
 {
@@ -34,7 +35,7 @@ namespace MqttNet.DependencyInjection.Publish
             var applicationMessage = new MqttApplicationMessageBuilder()
                 .WithTopic(topic)       // 主题
                 .WithPayload(message)   // 消息
-                .WithAtMostOnceQoS()  // qos
+                .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtMostOnce)  // qos
                 .WithRetainFlag()     // retain
                 .Build();
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using MQTTnet.Client.Subscribing;
-using MQTTnet.Client.Unsubscribing;
+using MQTTnet.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;

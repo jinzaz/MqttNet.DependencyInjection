@@ -3,8 +3,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using MQTTnet;
 using MQTTnet.Client;
-using MQTTnet.Client.Options;
-using MQTTnet.Client.Subscribing;
 using MqttNetDI.Client.HeartBeat;
 using Newtonsoft.Json;
 using System;
@@ -42,10 +40,10 @@ namespace MqttNetDI.Client
             try
             {
                 // 设置消息接收处理程序
-                _mqttClientCreate.mqttClient.UseApplicationMessageReceivedHandler(MessageReceived);
+                _mqttClientCreate.mqttClient.ApplicationMessageReceivedAsync += MessageReceivedAsync;
 
                 // 重连机制
-                _mqttClientCreate.mqttClient.UseDisconnectedHandler(async e =>
+                _mqttClientCreate.mqttClient.DisconnectedAsync += (async e =>
                 {
                     Console.WriteLine("与服务器之间的连接断开了，正在尝试重新连接");
                     // 等待 5s 时间
@@ -81,11 +79,11 @@ namespace MqttNetDI.Client
             }
         }
 
-        private void MessageReceived(MqttApplicationMessageReceivedEventArgs args)
+        private async Task MessageReceivedAsync(MqttApplicationMessageReceivedEventArgs args)
         {
             string topic = args.ApplicationMessage.Topic;
             string ClientId = args.ClientId;
-            string payload = Encoding.UTF8.GetString(args.ApplicationMessage.Payload);
+            string payload = Encoding.UTF8.GetString(args.ApplicationMessage.PayloadSegment);
             if (topic == _options.SubcribeHeartBeatTopic)
             {
                 HeartBeatArgs heartBeatInfo = JsonConvert.DeserializeObject<HeartBeatArgs>(payload);
@@ -102,7 +100,7 @@ namespace MqttNetDI.Client
                         HeartBeatinterval = heartBeatInfo.HeartBeatinterval,
                     });
                 }
-                _mqttClientEventHandler.HeartBeatReceived(heartBeatInfo);
+                await _mqttClientEventHandler.HeartBeatReceivedAsync(heartBeatInfo);
                 return;
             }
             MessageReceiveArgs messageReceiveArgs = new MessageReceiveArgs(
@@ -111,15 +109,16 @@ namespace MqttNetDI.Client
                 payload,
                 args.ApplicationMessage.QualityOfServiceLevel,
                 args.ApplicationMessage.Retain,
-                (CancellationToken) => { args.AcknowledgeAsync(CancellationToken); });
-            _mqttClientEventHandler.MessageReceived(messageReceiveArgs);
+                args.ReasonCode,
+                args.ResponseUserProperties,
+                async (CancellationToken) => { await args.AcknowledgeAsync(CancellationToken); });
+            await _mqttClientEventHandler.MessageReceivedAsync(messageReceiveArgs);
         }
 
         private async Task SubScribe()
         {
-            List<ClientTopic> clientTopics = new List<ClientTopic>();
-            _mqttClientEventHandler.SetTopic(out clientTopics);
-            List<string> topiclist = new List<string>();
+            _mqttClientEventHandler.SetTopic(out var clientTopics);
+            var topiclist = new List<string>();
             foreach (var item in clientTopics)
             {
                 topiclist.AddRange(item.TopicList);
