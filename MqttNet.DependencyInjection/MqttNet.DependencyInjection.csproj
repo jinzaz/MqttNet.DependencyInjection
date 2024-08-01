@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-	<RepositoryUrl>https://github.com/jinzaz/MqttNet.DependencyInjection.</RepositoryUrl>
+	<RepositoryUrl>https://github.com/jinzaz/MqttNet.DependencyInjection.git</RepositoryUrl>
 	<PackageProjectUrl>https://github.com/jinzaz/MqttNet.DependencyInjection</PackageProjectUrl>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<Title>MqttNet Client DependencyInjection in AspNetCore</Title>
