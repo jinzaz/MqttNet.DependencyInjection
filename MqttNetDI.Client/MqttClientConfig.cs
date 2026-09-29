@@ -1,11 +1,12 @@
 ﻿using MQTTnet;
 using MQTTnet.Client;
+using MQTTnet.Formatter;
 using MQTTnet.Packets;
 using MQTTnet.Protocol;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace MqttNetDI.Client
 {
@@ -30,7 +31,31 @@ namespace MqttNetDI.Client
         /// <summary>
         /// 端口
         /// </summary>
-        public int Port { get; set; }
+        public int Port { get; set; } = 1883;
+        /// <summary>
+        /// MQTT KeepAlive 周期
+        /// </summary>
+        public TimeSpan KeepAlivePeriod { get; set; } = TimeSpan.FromSeconds(60);
+        /// <summary>
+        /// 通讯超时时间
+        /// </summary>
+        public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(10);
+        /// <summary>
+        /// 断线重连间隔
+        /// </summary>
+        public TimeSpan ReconnectInterval { get; set; } = TimeSpan.FromSeconds(5);
+        /// <summary>
+        /// 清除会话
+        /// </summary>
+        public bool CleanSession { get; set; } = true;
+        /// <summary>
+        /// 协议版本
+        /// </summary>
+        public MqttProtocolVersion ProtocolVersion { get; set; } = MqttProtocolVersion.V311;
+        /// <summary>
+        /// 启用 TLS
+        /// </summary>
+        public bool UseTls { get; set; }
     }
 
     public class MessageReceiveArgs
@@ -58,7 +83,7 @@ namespace MqttNetDI.Client
         /// <summary>
         /// 消息确认方法
         /// </summary>
-        public Action<CancellationToken> AcknowledgeAsync { get; }
+        public Func<CancellationToken, Task> AcknowledgeAsync { get; }
 
         /// <summary>
         ///     Gets or sets the reason code which will be sent to the server.
@@ -78,7 +103,7 @@ namespace MqttNetDI.Client
             bool retain,
             MqttApplicationMessageReceivedReasonCode reasonCode,
             List<MqttUserProperty> userProperties,
-            Action<CancellationToken> action)
+            Func<CancellationToken, Task> action)
         {
             Topic = topic;
             ClientId = clientId;

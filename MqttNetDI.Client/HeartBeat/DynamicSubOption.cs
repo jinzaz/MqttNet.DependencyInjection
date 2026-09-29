@@ -17,6 +17,6 @@ namespace MqttNetDI.Client.HeartBeat
         /// <summary>
         /// 心跳检查间隔
         /// </summary>
-        public TimeSpan DynamicSubcribeinterval { get; set; }
+        public TimeSpan DynamicSubcribeinterval { get; set; } = TimeSpan.FromSeconds(10);
     }
 }

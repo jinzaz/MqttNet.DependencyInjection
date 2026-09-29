@@ -21,13 +21,13 @@ namespace MqttNet.DependencyInjection
         {
             Services.TryAddTransient<IMqttClientEventHandler, T>();
 
-            Services.AddSingleton<DynamicSubManagerService>();
+            Services.TryAddSingleton<DynamicSubManagerService>();
             Services.AddHostedService(sp => sp.GetRequiredService<DynamicSubManagerService>());
-            Services.AddSingleton<IDynamicSubManagerService>(sp => sp.GetRequiredService<DynamicSubManagerService>());
+            Services.TryAddSingleton<IDynamicSubManagerService>(sp => sp.GetRequiredService<DynamicSubManagerService>());
 
-            Services.AddSingleton<MqttClientService>();
+            Services.TryAddSingleton<MqttClientService>();
             Services.AddHostedService(sp => sp.GetRequiredService<MqttClientService>());
-            Services.AddSingleton<IMqttClientService>(sp => sp.GetRequiredService<MqttClientService>());
+            Services.TryAddSingleton<IMqttClientService>(sp => sp.GetRequiredService<MqttClientService>());
 
 
             return this;
@@ -39,12 +39,10 @@ namespace MqttNet.DependencyInjection
         /// <returns></returns>
         public MqttClientBuilder WithHeartBeat(Action<HeartBeatOption> action)
         {
-            var options = new HeartBeatOption();
-            action(options);
             Services.Configure(action);
-            Services.AddSingleton<HeartBeatService>();
+            Services.TryAddSingleton<HeartBeatService>();
             Services.AddHostedService(sp => sp.GetRequiredService<HeartBeatService>());
-            Services.AddSingleton<IHeartBeatService>(sp => sp.GetRequiredService<HeartBeatService>());
+            Services.TryAddSingleton<IHeartBeatService>(sp => sp.GetRequiredService<HeartBeatService>());
 
             return this;
         }
@@ -55,8 +53,6 @@ namespace MqttNet.DependencyInjection
         /// <returns></returns>
         public MqttClientBuilder WithDynamicScribe(Action<DynamicSubOption> action)
         {
-            var options = new DynamicSubOption();
-            action(options);
             Services.Configure(action);
             return this;
         }

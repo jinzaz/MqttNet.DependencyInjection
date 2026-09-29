@@ -21,8 +21,19 @@
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.25" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.25" />
     <PackageReference Include="MQTTnet" Version="4.3.6.1152" />
+    <!-- MqttNetDI.Client 打包进本包，其依赖需在此声明 -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MqttNetDI.Client\MqttNetDI.Client.csproj" />
+    <!-- MqttNetDI.Client 未单独发布到 NuGet，将其 dll 一并打包，避免包依赖不存在 -->
+    <ProjectReference Include="..\MqttNetDI.Client\MqttNetDI.Client.csproj" PrivateAssets="all" />
   </ItemGroup>
+  <PropertyGroup>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeReferencedProjects</TargetsForTfmSpecificBuildOutput>
+  </PropertyGroup>
+  <Target Name="IncludeReferencedProjects" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
+    </ItemGroup>
+  </Target>
 </Project>

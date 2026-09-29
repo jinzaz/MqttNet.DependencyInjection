@@ -1,15 +1,14 @@
-﻿using System;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Text;
 
 namespace MqttNetDI.Client.HeartBeat
 {
     public interface IDynamicSubManagerService
     {
         /// <summary>
-        /// <ClientId,Timestamp>
+        /// &lt;DeviceNo, ClientState&gt;，由 MQTT 接收线程与后台检查线程并发访问
         /// </summary>
-        Dictionary<string, ClientState> HeartBeatList { get; set; }
+        ConcurrentDictionary<string, ClientState> HeartBeatList { get; }
 
         IEnumerable<ClientTopic> ClientTopics { get; }
     }

@@ -1,46 +1,33 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using MQTTnet;
+﻿using MQTTnet;
 using MQTTnet.Client;
-using MQTTnet.Server;
+using MQTTnet.Protocol;
 using MqttNetDI.Client;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using MQTTnet.Protocol;
 
 namespace MqttNet.DependencyInjection.Publish
 {
     public class MqttClientPublisher : IMqttPublisher
     {
-
         private readonly IMqttClient mqttClient;
-        public MqttClientPublisher(IServiceProvider serviceProvider)
+        public MqttClientPublisher(IMqttClientCreate mqttClientCreate)
         {
-            mqttClient = serviceProvider.GetRequiredService<IMqttClientCreate>().mqttClient;
+            mqttClient = mqttClientCreate.mqttClient;
         }
-        /// <summary>
-        /// 发送信息
-        /// </summary>
-        /// <param name="topic"></param>
-        /// <param name="message"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public async Task PublishAsync(string topic, string message, CancellationToken cancellationToken = default)
-        {
 
+        public async Task PublishAsync(string topic, string message, CancellationToken cancellationToken = default) =>
+            await PublishAsync(topic, message, MqttQualityOfServiceLevel.AtMostOnce, false, cancellationToken);
+
+        public async Task PublishAsync(string topic, string message, MqttQualityOfServiceLevel qos, bool retain = false, CancellationToken cancellationToken = default)
+        {
             var applicationMessage = new MqttApplicationMessageBuilder()
-                .WithTopic(topic)       // 主题
-                .WithPayload(message)   // 消息
-                .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtMostOnce)  // qos
-                .WithRetainFlag()     // retain
+                .WithTopic(topic)
+                .WithPayload(message)
+                .WithQualityOfServiceLevel(qos)
+                .WithRetainFlag(retain)
                 .Build();
 
-            await mqttClient.PublishAsync(applicationMessage);
+            await mqttClient.PublishAsync(applicationMessage, cancellationToken);
         }
-
     }
 }

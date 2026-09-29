@@ -14,7 +14,7 @@ namespace MqttNetDI.Client.HeartBeat
         /// 心跳发送主题
         /// </summary>
         public string PubHeartBeatTopic { get; set; }
-        public TimeSpan HeartBeatinterval { get; set; }
+        public TimeSpan HeartBeatinterval { get; set; } = TimeSpan.FromSeconds(10);
         public string DeviceNo { get; set; }
         public object CustmData { get; set; } = null;
     }

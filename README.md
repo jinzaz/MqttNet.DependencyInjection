@@ -16,6 +16,13 @@ public void ConfigureServices(IServiceCollection services)
         options.UserName = "";  //用户名
         options.Passowrd = ""; //密码
         options.ClientId = "ClientId";  //配置ClientId
+        // 以下为可选项（括号内为默认值）
+        // options.KeepAlivePeriod = TimeSpan.FromSeconds(60);
+        // options.Timeout = TimeSpan.FromSeconds(10);        //通讯超时
+        // options.ReconnectInterval = TimeSpan.FromSeconds(5); //断线重连间隔
+        // options.CleanSession = true;
+        // options.ProtocolVersion = MqttProtocolVersion.V311;
+        // options.UseTls = false;
     }).AddEventHandler<MqttClientEventHandler>()  //Topic配置和消息处理 handler类，
     //开启心跳
     .WithHeartBeat(options => 
@@ -53,7 +60,7 @@ public void ConfigureServices(IServiceCollection services)
         //设置需要订阅的Topic列表，
         //未开启动态订阅，将遍历所有主题全部订阅
         //开启动态订阅，通过心跳解析，对其对应的ClientId下的Topic列表进行订阅和退订
-        public override void SetTopic(out List<ClientTopic> mqttClient)
+        public override void SetTopic(out IEnumerable<ClientTopic> mqttClient)
         {
             mqttClient = new List<ClientTopic>()
             {
@@ -69,14 +76,17 @@ public void ConfigureServices(IServiceCollection services)
         }
 
         //心跳处理方法
-        public override void HeartBeatReceived(HeartBeatArgs args)
+        public override Task HeartBeatReceivedAsync(HeartBeatArgs args)
         {
+            return Task.CompletedTask;
         }
 
-        //消息处理方法，
-        public override void MessageReceived(MessageReceiveArgs args)
+        //消息处理方法（异常会被捕获并记录日志，不会中断连接）
+        public override async Task MessageReceivedAsync(MessageReceiveArgs args)
         {
-            _mqttPublisher.PublishAsync(); //内置的发送信息服务
+            await _mqttPublisher.PublishAsync("reply", "ok"); //内置的发送信息服务
+            // 可指定 QoS / Retain：
+            // await _mqttPublisher.PublishAsync("reply", "ok", MqttQualityOfServiceLevel.AtLeastOnce, retain: false);
             Console.WriteLine("### 收到来自服务器端的消息 ###");
             // 收到的消息主题
             string topic = args.Topic;
@@ -86,7 +96,7 @@ public void ConfigureServices(IServiceCollection services)
             var qos = args.QosLevel;
             // 收到的消息保持形式
             bool retain = args.Retain;
-            args.AcknowledgeAsync(new CancellationTokenSource().Token);
+            // 消息在处理方法返回后自动确认，无需手动调用 args.AcknowledgeAsync
             var message = $"主题: [{topic}] 内容: [{payload}] Qos: [{qos}] Retain:[{retain}]";
             Console.WriteLine(message);
         }

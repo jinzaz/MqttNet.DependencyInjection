@@ -17,11 +17,9 @@ namespace MqttNet.DependencyInjection
             {
                 throw new ArgumentNullException(nameof(setupAction));
             }
-            var options = new MqttClientConfig();
-            setupAction(options);
             services.Configure(setupAction);
-            services.AddSingleton<IMqttClientCreate, MqttClientCreate>();
-            services.TryAddTransient<IMqttPublisher, MqttClientPublisher>();
+            services.TryAddSingleton<IMqttClientCreate, MqttClientCreate>();
+            services.TryAddSingleton<IMqttPublisher, MqttClientPublisher>();
             return new MqttClientBuilder(services);
         }
 
