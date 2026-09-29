@@ -1,11 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.2.32519.379
+# Visual Studio Version 18
+VisualStudioVersion = 18.11.12210.170 insiders
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MqttNet.DependencyInjection", "MqttNet.DependencyInjection\MqttNet.DependencyInjection.csproj", "{87C93AA2-7395-4494-8F23-D76EE8E676FD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MqttNetDI.Client", "MqttNetDI.Client\MqttNetDI.Client.csproj", "{B228A523-BA2A-43B5-B692-A0DD9BBAEE46}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{092BE550-8C09-4D8A-8FA3-06E2AF2EBBAC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{9A82D58F-95CC-4208-A7F1-D9BB59C3FCDE}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\main.yml = .github\workflows\main.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +31,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9A82D58F-95CC-4208-A7F1-D9BB59C3FCDE} = {092BE550-8C09-4D8A-8FA3-06E2AF2EBBAC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8BA9DA54-EC4A-4EDA-A4A2-4B957F3E38D0}
